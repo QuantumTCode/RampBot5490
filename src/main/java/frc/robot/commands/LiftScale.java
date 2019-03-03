@@ -10,7 +10,7 @@ import frc.robot.Robot;
 public class LiftScale extends LiftSetpoint {
 
 	// TODO determine exact value for scale
-	private static final double downpos = 800;		// mm
+	private static final double downpos = 600;		// mm
 
     public LiftScale() {    	
     	super(downpos);

@@ -17,10 +17,18 @@ public class RobotMap {
 
 	// The following mapping is final as of 2/22/18
 	// the following are CAN addresses for the Talon SRX's
+	/*
 	public static int mtrFrontLeft = 1;
 	public static int mtrFrontRight = 2;
 	public static int mtrRearRight = 3;
 	public static int mtrRearLeft = 4;	
+	*/
+
+	// the following are CAN addresses for the SparkMAX
+	public static int mtrFrontLeft = 11;
+	public static int mtrFrontRight = 12;
+	public static int mtrRearRight = 13;
+	public static int mtrRearLeft = 14;	
 	
 
 	// the following are PWM addresses for the Spark's	 
@@ -64,15 +72,17 @@ public class RobotMap {
 	
 	
 	// Encoder map
-	public static int liftEncoderA = 3;
-	public static int liftEncoderB = 4;	
+	public static int liftEncoderA = 0;
+	public static int liftEncoderB = 1;	
 		
 	// Limit switches
-	public static int ls_transferForward = 0;
-	public static int ls_transferBack = 2;
+	public static int ls_transferForward = 3;
+	public static int ls_transferBack = 4;
 
-	public static int ls_liftDown = 1;
+	public static int ls_liftDown = 2;
 	
 	
+	public static int us_LeftDist = 0;
+	public static int us_RightDist = 1;
 	
 }

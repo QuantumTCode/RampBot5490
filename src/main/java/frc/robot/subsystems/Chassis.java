@@ -1,11 +1,15 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.*;
-import edu.wpi.first.wpilibj.drive.*;
 
+import edu.wpi.first.wpilibj.drive.*;
+import edu.wpi.first.wpilibj.SpeedController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+// this is for the Talon SRX version
+//import edu.wpi.first.wpilibj.Talon;
+import com.revrobotics.*;
 
 import frc.robot.RobotMap;
 import frc.robot.commands.DriveRobot;
@@ -18,6 +22,7 @@ import frc.robot.HermiteSpline;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.AnalogInput;
 
 
 import com.analog.adis16448.frc.ADIS16448_IMU;
@@ -36,10 +41,19 @@ public class Chassis extends Subsystem {
 	private static final double minimum_drive = 0.1;
 	
 	// Main Movement Drive 
+	/*
 	WPI_TalonSRX motorFrontLeft= new WPI_TalonSRX(RobotMap.mtrFrontLeft);
 	WPI_TalonSRX motorRearLeft= new WPI_TalonSRX(RobotMap.mtrRearLeft);
 	WPI_TalonSRX motorFrontRight= new WPI_TalonSRX(RobotMap.mtrFrontRight);
 	WPI_TalonSRX motorRearRight= new WPI_TalonSRX(RobotMap.mtrRearRight);
+	*/
+	
+
+
+	CANSparkMax motorFrontLeft= new CANSparkMax(RobotMap.mtrFrontLeft, CANSparkMaxLowLevel.MotorType.kBrushless);
+	CANSparkMax motorRearLeft= new CANSparkMax(RobotMap.mtrRearLeft, CANSparkMaxLowLevel.MotorType.kBrushless);
+	CANSparkMax motorFrontRight= new CANSparkMax(RobotMap.mtrFrontRight, CANSparkMaxLowLevel.MotorType.kBrushless);
+	CANSparkMax motorRearRight= new CANSparkMax(RobotMap.mtrRearRight, CANSparkMaxLowLevel.MotorType.kBrushless);
 	
 
     MecanumDrive m_robotDrive = new MecanumDrive(motorFrontLeft,motorRearLeft,motorFrontRight,motorRearRight);
@@ -52,14 +66,18 @@ public class Chassis extends Subsystem {
     
     //private static HermiteSpline Hcurve;
     
-    ADIS16448_IMU imu = new ADIS16448_IMU();
+	ADIS16448_IMU imu = new ADIS16448_IMU();
+	
+	AnalogInput  LeftDistance = new AnalogInput(RobotMap.us_LeftDist);
+	AnalogInput  RightDistance = new AnalogInput(RobotMap.us_RightDist);
+
     
     
     public int segment;
     public double percent;
     public double tick; 
     
-    
+    public double speed;
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -68,14 +86,23 @@ public class Chassis extends Subsystem {
 		// Set the default command for a subsystem here.
 		
 		    /* factory default values */
-		motorFrontLeft.configFactoryDefault();
+		/*motorFrontLeft.configFactoryDefault();
 		motorRearLeft.configFactoryDefault();
 		motorFrontRight.configFactoryDefault();
-		motorRearRight.configFactoryDefault();
+		motorRearRight.configFactoryDefault();*/
     	
     	DefineJoystickResponse();
-    	
+		
+		//int bits;
+		LeftDistance.setOversampleBits(4);
+		//bits = LeftDistance.getOversampleBits();
+		LeftDistance.setAverageBits(2);
+		//bits = LeftDistance.getAverageBits();
 
+		RightDistance.setOversampleBits(4);
+		//bits = LeftDistance.getOversampleBits();
+		RightDistance.setAverageBits(2);
+		//bits = LeftDistance.getAverageBits();
 
 		// (2/14/2018) Inversion proved to be necessary to get the robot moving in the right direction 
     	//motorFrontLeft.setInverted(true);
@@ -115,6 +142,12 @@ public class Chassis extends Subsystem {
 		SmartDashboard.putNumber("Pressure: ", imu.getBarometricPressure());
 		SmartDashboard.putNumber("Temperature: ", imu.getTemperature());
 		
+
+		SmartDashboard.putNumber("Left Distance: ",  LeftDistance.getValue());
+		SmartDashboard.putNumber("Right Distance: ",  RightDistance.getValue());
+		
+		
+
     }
     
     private void DefineJoystickResponse()
@@ -177,14 +210,14 @@ public class Chassis extends Subsystem {
 		SmartDashboard.putNumber("Pressure: ", imu.getBarometricPressure());
 		SmartDashboard.putNumber("Temperature: ", imu.getTemperature());
 		
-		
+		SmartDashboard.putNumber("Speed: ", speed);
 	}
 
 	
 	public void Drive(Joystick driveStick)
 	{
 		double speedrange = 1 - minimum_drive;
-		double speed = (-speedrange*driveStick.getThrottle()+1)/2;
+		speed = (-speedrange*driveStick.getThrottle()+1)/2;
 		speed += minimum_drive;
 
 		m_robotDrive.setDeadband(0.2);
@@ -256,8 +289,8 @@ public class Chassis extends Subsystem {
 		if (Z > 1.0) Z = 1.0;
 		if (speed > 1.0) speed = 1.0;
 		
-		m_robotDrive.driveCartesian( -1 * X * speed, -1 * Y * speed, Z * speed, imu.getAngleY());
-		//m_robotDrive.driveCartesian( -1 * X * speed, -1 * Y * speed, Z * speed);
+		//m_robotDrive.driveCartesian( -1 * X * speed, -1 * Y * speed, Z * speed, imu.getAngleY());
+		m_robotDrive.driveCartesian( -1 * X * speed, -1 * Y * speed, Z * speed);
 	}
 	
 	public void StopMotors()

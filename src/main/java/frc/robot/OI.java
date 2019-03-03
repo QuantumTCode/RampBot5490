@@ -120,14 +120,17 @@ public class OI {
 		button3.toggleWhenPressed(new TransferToBack());
 		button5.toggleWhenPressed(new TransferToForward());
 		liftManualDown.whileHeld(new LiftManualMove(-1, 0.5));
-		liftManualUp.whileHeld(new LiftManualMove(1, 0.5));
+		liftManualUp.whileHeld(new LiftManualMove(1, 0.50));
+		
 		
 		// TODO change mappings depending on the driver's preferences
 		button7.whenPressed(new LiftDown());
+
 		button9.whenPressed(new LiftSwitch());
+
 		button10.whenPressed(new LiftScale());
 		button11.whenPressed(new LiftHook());
-		button12.whileHeld(new LiftRobot());
+		button12.whenPressed(new LiftRobot());
 	}
 	
 	public Joystick getJoystick() {

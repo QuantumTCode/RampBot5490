@@ -40,7 +40,7 @@ public class Lift extends PIDSubsystem {
 	
 	public Lift() {
 		super(kP, kI, 0);
-		m_LiftEncoder.setDistancePerPulse(mm_per_turn / pulses_per_revolution);   // 4.88 mm per turn of the shaft / pulses per turn
+		
 		setAbsoluteTolerance(tolerance); // MM
 		
 		/*
@@ -57,7 +57,8 @@ public class Lift extends PIDSubsystem {
 		motorVac.configOpenloopRamp(0, 0);			// we d
 		*/
 		
-		m_LiftEncoder.setDistancePerPulse(mm_per_turn / pulses_per_revolution);   // 4.88 mm per turn of the shaft / pulses per turn
+		//m_LiftEncoder.setDistancePerPulse(mm_per_turn / pulses_per_revolution);   // 4.88 mm per turn of the shaft / pulses per turn
+		m_LiftEncoder.setDistancePerPulse(0.012058 * 25.4);   // 4.88 mm per turn of the shaft / pulses per turn
 		
 		setAbsoluteTolerance(0.05); // MM
 		
@@ -134,7 +135,7 @@ public class Lift extends PIDSubsystem {
 	 * Return true when the which lift triggers the "bottom" limit switch.
 	 */
 	public boolean isAtBottom() {
-		return ! m_lsBottom.get();
+		return  m_lsBottom.get();
 	}
 	
 	public boolean isClamped() {
@@ -142,6 +143,7 @@ public class Lift extends PIDSubsystem {
 		return m_clamped;
 	}
 
+	
 	
 	/**
 	 * Use the magnetic encoder as the PID sensor. This method is automatically

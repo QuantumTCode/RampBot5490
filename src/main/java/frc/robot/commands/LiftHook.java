@@ -10,7 +10,7 @@ import frc.robot.Robot;
 public class LiftHook extends LiftSetpoint {
 
 	//TODO determine exact value for hook
-	private static final double hookpos = 900;
+	private static final double hookpos = 800;
 
     public LiftHook() {    	
     	super(hookpos);
